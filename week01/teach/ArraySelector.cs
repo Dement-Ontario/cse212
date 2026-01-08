@@ -1,3 +1,5 @@
+using System.IO.Pipelines;
+
 public static class ArraySelector
 {
     public static void Run()
@@ -11,6 +13,23 @@ public static class ArraySelector
 
     private static int[] ListSelector(int[] list1, int[] list2, int[] select)
     {
-        return [];
+        var result = new int[select.Length];
+        int l1Index = 0;
+        int l2Index = 0;
+
+        for (int selNum = 0; selNum < select.Length; selNum++)
+        {
+            if (select[selNum] == 1)
+            {
+                result[selNum] = list1[l1Index];
+                l1Index++;
+            }
+            else
+            {
+                result[selNum] = list2[l2Index];
+                l2Index++;
+            }
+        }
+        return result;
     }
 }
