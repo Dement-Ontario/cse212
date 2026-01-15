@@ -1,4 +1,7 @@
-﻿/// <summary>
+﻿using System.ComponentModel.Design;
+using System.Runtime.InteropServices;
+
+/// <summary>
 /// Maintain a Customer Service Queue.  Allows new customers to be 
 /// added and allows customers to be serviced.
 /// </summary>
@@ -11,24 +14,57 @@ public class CustomerService {
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: User inputs 0 and a number under 0
+        // Expected Result: Console prints 10 twice
         Console.WriteLine("Test 1");
 
-        // Defect(s) Found: 
+        var custService = new CustomerService(0);
+        Console.WriteLine(custService._maxSize);
+        custService = new CustomerService(-1);
+        Console.WriteLine(custService._maxSize);
+
+        // Defect(s) Found: None
 
         Console.WriteLine("=================");
 
         // Test 2
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: Add a new customer until the line overflows
+        // Expected Result: 2 new customers should be displayed
+        //                  and an error should be thrown when overflowed
         Console.WriteLine("Test 2");
+        
+        custService = new CustomerService(2);
+        custService.AddNewCustomer();
+        custService.AddNewCustomer();
+        Console.WriteLine(custService);
+        custService.AddNewCustomer();
 
-        // Defect(s) Found: 
+        // Defect(s) Found: The if statement checked if the queue count was greater than the max size
+        //                  instead of checking if it was equal
 
         Console.WriteLine("=================");
 
-        // Add more Test Cases As Needed Below
+        // Test 3
+        // Scenario: Serve customers until there are none left, then serve an empty queue
+        // Expected Result: Customers are removed once served, then an error is thrown when trying to
+        //                  serve a customer where there is none
+        Console.WriteLine("Test 3");
+
+        custService = new CustomerService(3);
+        custService.AddNewCustomer();
+        custService.AddNewCustomer();
+        custService.AddNewCustomer();
+        Console.WriteLine(custService);
+        custService.ServeCustomer();
+        custService.ServeCustomer();
+        custService.ServeCustomer();
+        Console.WriteLine(custService);
+        custService.ServeCustomer();
+
+        // Defect(s) Found: Function removed the customer before the customer could be displayed
+        //                  and there was nothing to show there were no more customers
+
+        Console.WriteLine("=================");
     }
 
     private readonly List<Customer> _queue = new();
@@ -67,7 +103,7 @@ public class CustomerService {
     /// </summary>
     private void AddNewCustomer() {
         // Verify there is room in the service queue
-        if (_queue.Count > _maxSize) {
+        if (_queue.Count == _maxSize) {
             Console.WriteLine("Maximum Number of Customers in Queue.");
             return;
         }
@@ -88,11 +124,17 @@ public class CustomerService {
     /// Dequeue the next customer and display the information.
     /// </summary>
     private void ServeCustomer() {
-        _queue.RemoveAt(0);
+        if (_queue.Count == 0)
+        {
+            Console.WriteLine("There are no more customers to serve.");
+            return;
+        }
+        
         var customer = _queue[0];
         Console.WriteLine(customer);
+        _queue.RemoveAt(0);
     }
-
+    
     /// <summary>
     /// Support the WriteLine function to provide a string representation of the
     /// customer service queue object. This is useful for debugging. If you have a 
