@@ -9,6 +9,9 @@ public class PriorityQueueTests
     // Scenario: Make a queue and enqueue these values and priorities: (A, 1), (B, 2), (C, 3),
     // then dequeue once
     // Expected Result: PriorityQueue is [A (Pri:1), B (Pri:2), C (Pri:3)], then C is dequeued
+
+    // Initial Result: Queue was enqueued correctly, but dequeued B
+
     // Defect(s) Found: The for loop in Dequeue didn't run for the last item in the queue
     public void TestPriorityQueue_1()
     {
@@ -26,6 +29,9 @@ public class PriorityQueueTests
     // Scenario: Make a queue and enqueue these values and priorities: (A, 3), (B, 1), (C, 3),
     // then dequeue once
     // Expected Result: The code should dequeue A
+
+    // Initial Result: The code dequeued C
+
     // Defect(s) Found: The Dequeue function checked for whether the current index's priority was
     // also equal to the high priority index's priority, so the high priority index was changed to
     // the last high-priority index instead of the first
@@ -45,6 +51,9 @@ public class PriorityQueueTests
     // Scenario: Make a queue and enqueue these values and priorities: (A, 1), (B, 2), (C, 3),
     // then dequeue until there's nothing left, then dequeue again
     // Expected Result: InvalidOperationException error
+
+    // Initial Result: No error was thrown
+    
     // Defect(s) Found: Dequeue didn't remove anything from the queue
     public void TestPriorityQueue_3()
     {
