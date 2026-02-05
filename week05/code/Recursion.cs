@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 
 public static class Recursion
 {
@@ -14,8 +15,17 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
+        // If the (n - 1) in the last instance equals 0, stop the recursion
+        if (n <= 0)
+        {
+            return 0;
+        }
+        // Otherwise, add the square of n to a new instance
+        // and so on until it reaches 0
+        else
+        {
+            return (n*n) + SumSquaresRecursive(n - 1);
+        }
     }
 
     /// <summary>
@@ -39,7 +49,24 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        // If the word length is the size specified, add it to the results
+        if(word.Length == size)
+        {
+            results.Add(word);
+        }
+        // Otherwise:
+        else
+        {
+            // Loop through the letters
+            for (int i = 0; i < letters.Length; i++)
+            {
+                // Make a copy of the letters without the specific letter
+                var lettersLeft = letters.Remove(i, 1);
+                // Add the letter to the word and run the function inside the function
+                // until all the permutations are added to the list
+                PermutationsChoose(results, lettersLeft, size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -96,10 +123,18 @@ public static class Recursion
         if (s == 3)
             return 4;
 
-        // TODO Start Problem 3
+        // If there's no remember dictionary, make one
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+        
+        // If the dictionary already has the answer, use that instead
+        if (remember.ContainsKey(s))
+            return remember[s];
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        // Remember the answer
+        remember[s] = ways;
         return ways;
     }
 
@@ -118,7 +153,26 @@ public static class Recursion
     /// </summary>
     public static void WildcardBinary(string pattern, List<string> results)
     {
-        // TODO Start Problem 4
+        // If there are no wildcards, add the pattern
+        if (!pattern.Contains("*"))
+            results.Add(pattern);
+        else
+        {
+            // Make an array of the pattern and a variable for the wildcard index
+            char[] chars = pattern.ToCharArray();
+            int wildcard = pattern.IndexOf("*");
+            
+            // Change the chars wildcard to 0, make a new string out of it,
+            // then run a new function with the new string
+            chars[wildcard] = '0';
+            string newPattern = new string(chars);
+            WildcardBinary(newPattern, results);
+
+            // The same, but change the wildcard to 1
+            chars[wildcard] = '1';
+            newPattern = new string(chars);
+            WildcardBinary(newPattern, results);
+        }
     }
 
     /// <summary>
