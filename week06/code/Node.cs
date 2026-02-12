@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public class Node
 {
     public int Data { get; set; }
@@ -11,7 +13,8 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
+        if (value == Data)
+            return;
 
         if (value < Data)
         {
@@ -33,13 +36,35 @@ public class Node
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
+        if (value == Data)
+            return true;
+        else
+        {
+            if (Left is not null && Left.Contains(value))
+                return true;
+            if (Right is not null && Right.Contains(value))
+                return true;
+        }
+        
         return false;
     }
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        int height = 1;
+        int leftHeight = 0;
+        int rightHeight = 0;
+        
+        if (Left is not null)
+            leftHeight += Left.GetHeight();
+        if (Right is not null)
+            rightHeight += Right.GetHeight();
+
+        if (leftHeight > rightHeight)
+            height += leftHeight;
+        else
+            height += rightHeight;
+
+        return height;
     }
 }
